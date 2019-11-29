@@ -47,6 +47,54 @@ namespace PerpustakaanAppMVC.Model.Repository
             return result;
         }
 
+        public int Update(Mahasiswa mhs)
+        {
+            int result = 0;
+            
+            string sql = @"UPDATE mahasiswa SET nama=@nama, angkatan=@angkatan WHERE npm=@npm";
+            
+            using (OleDbCommand cmd = new OleDbCommand(sql, _conn))
+            {
+                cmd.Parameters.AddWithValue("@npm", mhs.Npm);
+                cmd.Parameters.AddWithValue("@nama", mhs.Nama);
+                cmd.Parameters.AddWithValue("@angkatan", mhs.Angkatan);
+
+                try
+                {
+                    result = cmd.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.Print("Update error: {0}", ex.Message);
+                }
+            }
+
+            return result;
+        }
+
+        public int Delete(Mahasiswa mhs)
+        {
+            int result = 0;
+
+            string sql = @"DELETE FROM mahasiswa WHERE npm=@npm";
+
+            using (OleDbCommand cmd = new OleDbCommand(sql, _conn))
+            {
+                cmd.Parameters.AddWithValue("@npm", mhs.Npm);
+
+                try
+                {
+                    result = cmd.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.Print("Delete error: {0}", ex.Message);
+                }
+            }
+
+            return result;
+        }
+
         public List<Mahasiswa> ReadAll()
         {
             // membuat objek collection untuk menampung objek mahasiswa
@@ -132,8 +180,6 @@ namespace PerpustakaanAppMVC.Model.Repository
 
             return list;
         }
-
-
 
     }
 }
